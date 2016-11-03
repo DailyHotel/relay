@@ -6,25 +6,37 @@ from twisted.web.server import Site
 from twisted.web.resource import Resource
 from twisted.internet import reactor
 
-url = os.environ['slack_url']
-port = int(os.environ['relay_port'])
+url = os.environ['SLACK_URL']
+port = int(os.environ['RELAY_PORT'])
+default_channel = os.environ.get('DEFAULT_CHANNEL')
+if not default_channel:
+    default_channel = "#dev"
+image_url = os.environ.get('IMAGE_URL')
+if not image_url:
+    image_url = 'http://www.clipartkid.com/images/195/and-the-final-winner-of-a-tpc-t-shirt-is-congrats1-OdzPW5-clipart.gif'
 docker_icon_url = 'https://pbs.twimg.com/profile_images/378800000124779041/fbbb494a7eef5f9278c6967b6072ca3e_200x200.png'
 headers = {'content-type': 'application/json'}
 
 def channel_of_repo_name(repo_name):
+    if not os.path.exists('channel_selector.json'):
+        return default_channel
     with open('channel_selector.json', 'r') as json_file:
         channel_selector = json.load(json_file)
     if repo_name in channel_selector:
         return channel_selector[repo_name]
     else:
-        return None
+        return default_channel
 
 def make_slack_post(docker_data):
     repo = docker_data['repository']
+    push_data = docker_data['push_data']
     return {
         'channel': channel_of_repo_name(repo['repo_name']),
         'username': 'Docker Hub',
         'text': '<{}|{}> built successfully.'.format(repo['repo_url'], repo['repo_name']),
+        'attachments': [{ "color": "good", "text": 'Congrats!', "image_url": image_url, "fields": [{ "title": "Tag", "value": push_data['tag'], "short": "true"}, {"title": "Pusher", "value": push_data['pusher'], "short": "true" }] }],
+        "unfurl_links": 'false',
+        'mrkdwn': 'true',
         'icon_url': docker_icon_url
     }
 

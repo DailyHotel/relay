@@ -1,3 +1,6 @@
+[![](https://images.microbadger.com/badges/image/dailyhotel/relay.svg)](https://microbadger.com/images/dailyhotel/relay "Get your own image badge on microbadger.com")
+[![](https://images.microbadger.com/badges/version/dailyhotel/relay.svg)](https://microbadger.com/images/dailyhotel/relay "Get your own version badge on microbadger.com")
+
 # relay
 
 A shim to get webhook POSTs from Docker Hub and post them to [Slack](http://slack.com).

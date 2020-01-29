@@ -11,10 +11,7 @@ port = int(os.environ['RELAY_PORT'])
 default_channel = os.environ.get('DEFAULT_CHANNEL')
 if not default_channel:
     default_channel = "#dev"
-image_url = os.environ.get('IMAGE_URL')
-if not image_url:
-    image_url = 'http://www.clipartkid.com/images/195/and-the-final-winner-of-a-tpc-t-shirt-is-congrats1-OdzPW5-clipart.gif'
-docker_icon_url = 'https://pbs.twimg.com/profile_images/378800000124779041/fbbb494a7eef5f9278c6967b6072ca3e_200x200.png'
+docker_icon_url = 'https://dailyhotel.atlassian.net/s/rvt46q/b/20/bb034c42ada37676f34de6633df1f793/_/jira-logo-scaled.png'
 headers = {'content-type': 'application/json'}
 
 def channel_of_repo_name(repo_name):
@@ -34,7 +31,7 @@ def make_slack_post(docker_data):
         'channel': channel_of_repo_name(repo['repo_name']),
         'username': 'Docker Hub',
         'text': '<{}|{}> built successfully.'.format(repo['repo_url'], repo['repo_name']),
-        'attachments': [{ "color": "good", "text": 'Congrats!', "image_url": image_url, "fields": [{ "title": "Tag", "value": push_data['tag'], "short": "true"}, {"title": "Pusher", "value": push_data['pusher'], "short": "true" }] }],
+        'attachments': [{ "color": "good", "fields": [{ "title": "Tag", "value": push_data['tag'], "short": "false"}] }],
         "unfurl_links": 'false',
         'mrkdwn': 'true',
         'icon_url': docker_icon_url

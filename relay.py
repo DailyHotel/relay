@@ -11,9 +11,7 @@ port = int(os.environ['RELAY_PORT'])
 default_channel = os.environ.get('DEFAULT_CHANNEL')
 if not default_channel:
     default_channel = "#dev"
-default_icon_url = os.environ.get['ICON_URL']    
-if not default_icon_url:
-    default_icon_url = 'https://dailyhotel.atlassian.net/s/rvt46q/b/20/bb034c42ada37676f34de6633df1f793/_/jira-logo-scaled.png'
+docker_icon_url = 'https://dailyhotel.atlassian.net/s/rvt46q/b/20/bb034c42ada37676f34de6633df1f793/_/jira-logo-scaled.png'
 headers = {'content-type': 'application/json'}
 
 def channel_of_repo_name(repo_name):
@@ -36,7 +34,7 @@ def make_slack_post(docker_data):
         'attachments': [{ "color": "good", "fields": [{ "title": "Tag", "value": push_data['tag'], "short": "false"}] }],
         "unfurl_links": 'false',
         'mrkdwn': 'true',
-        'icon_url': default_icon_url
+        'icon_url': docker_icon_url
     }
 
 class Relay(Resource):
